@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 2rem;
+    }
+
+    .contact-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .contact-item {
+      margin-bottom: 25px;
+    }
+
+    .contact-item label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .contact-item a {
+      color: #00bfff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+
+    .discord-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .discord-link img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contact Us</h1>
+  <div class="contact-container">
+
+    <div class="contact-item">
+      <label>Email Us:</label>
+      <a href="mailto:pokemontrader@example.com">pokemontrader@example.com</a>
+    </div>
+
+    <div class="contact-item">
+      <label>Join our Discord:</label>
+      <div class="discord-link">
+        <img src="images/discord-icon.png" alt="Discord Icon" />
+        <a href="https://discord.gg/your-server-link" target="_blank">https://discord.gg/your-server-link</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

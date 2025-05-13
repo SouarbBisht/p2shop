@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item Details - Pokémon</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .item-container, .item-header {
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    img {
+      width: 300px;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .options select, .options button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      color: #f39c12;
+    }
+
+    .payment-methods {
+      margin-top: 20px;
+    }
+
+    .payment-methods label {
+      margin-right: 15px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: #222;
+      border-radius: 10px;
+      padding: 15px;
+      width: 200px;
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      margin: 10px 0 5px;
+      font-size: 1rem;
+    }
+
+    .card p {
+      margin: 0 0 10px;
+      color: #f39c12;
+    }
+
+    .card button {
+      background-color: #5865F2;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .card button:hover {
+      background-color: #4854d4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="item-container" id="itemContainer"></div>
+  <div class="product-grid" id="productGrid"></div>
+
+  <script>
+    const items = {
+      1: {
+        title: "PC Pack - 1M",
+        image: "images/IMG_5856.webp",
+        description: "Buy PokéCoins (PC) for in-game purchases. Fast delivery guaranteed!"
+      },
+      2: {
+        title: "Available Shiny Pokémon",
+        image: "images/IMG_5857.jpg",
+        description: "Choose from rare shiny Pokémon available now!",
+        products: [
+          { name: "Shiny Charizard", img: "images/shiny_charizard.jpg", price: "5M PC" },
+          { name: "Shiny Gyarados", img: "images/shiny_gyarados.jpg", price: "3M PC" },
+          { name: "Shiny Metagross", img: "images/shiny_metagross.jpg", price: "4M PC" },
+          { name: "Shiny Greninja", img: "images/shiny_greninja.jpg", price: "6M PC" },
+          { name: "Shiny Umbreon", img: "images/shiny_umbreon.jpg", price: "4M PC" },
+          { name: "Shiny Garchomp", img: "images/shiny_garchomp.jpg", price: "4.5M PC" }
+        ]
+      },
+      3: {
+  title: "Rare Pokémon - Ultra Power",
+  image: "images/IMG_5859.jpg",
+  description: "Extremely rare Pokémon with unique skills. Only a few left!",
+  products: [
+    { name: "Darkrai", img: "images/darkrai.jpg", price: "7M PC" },
+    { name: "Arceus", img: "images/arceus.jpg", price: "8M PC" },
+    { name: "Mewtwo", img: "images/mewtwo.jpg", price: "6M PC" },
+    { name: "Rayquaza", img: "images/rayquaza.jpg", price: "7.5M PC" },
+    { name: "Giratina", img: "images/giratina.jpg", price: "6.5M PC" },
+    { name: "Zekrom", img: "images/zekrom.jpg", price: "6M PC" },
+    { name: "Reshiram", img: "images/reshiram.jpg", price: "6M PC" }
+  ]
+}
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('item') || '1';
+    const item = items[itemId];
+
+    const itemContainer = document.getElementById('itemContainer');
+    const productGrid = document.getElementById('productGrid');
+
+    if (itemId === '1') {
+      itemContainer.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" />
+        <h1>${item.title}</h1>
+        <p>${item.description}</p>
+        <div class="options">
+          <label>Select Quantity:</label>
+          <select id="quantity" onchange="updatePrice()">
+            <option value="1">1M PC</option>
+            <option value="2">2M PC</option>
+            <option value="5">5M PC</option>
+            <option value="10">10M PC</option>
+          </select>
+          <p class="price" id="price">Price: $1</p>
+          <button onclick="buyItem()">Buy Now</button>
+        </div>
+        <div class="payment-methods">
+          <p>Select Payment Method:</p>
+          <label><input type="radio" name="payment" value="ltc" checked /> LTC</label>
+          <label><input type="radio" name="payment" value="upi" /> UPI</label>
+          <label><input type="radio" name="payment" value="paypal" /> PayPal</label>
+        </div>
+      `;
+    } else {
+      itemContainer.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" />
+        <h1>${item.title}</h1>
+        <p style="color:#ccc;">${item.description}</p>
+      `;
+      item.products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p>${p.price}</p>
+          <button onclick="alert('Buying ${p.name}')">Buy</button>
+        `;
+        productGrid.appendChild(card);
+      });
+    }
+
+    function updatePrice() {
+      const quantity = document.getElementById('quantity').value;
+      document.getElementById('price').textContent = `Price: $${quantity}`;
+    }
+
+    function buyItem() {
+      const quantity = document.getElementById('quantity').value;
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      alert(`You selected ${quantity}M PC via ${paymentMethod.toUpperCase()}.\nTotal: $${quantity}`);
+    }
+  </script>
+
+</body>
+</html>

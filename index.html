@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centered Logo with Navbar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar with Title -->
+  <nav>
+    <span class="navbar-title">P2shop</span>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#">Home</a></li>
+      <li><a href="buy.html">Buy</a></li>
+      <li><a href="sell.html">Sell</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+  </nav>
+  <div id="shinyListContainer" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;"></div>
+
+
+  <!-- Centered Logo + Description + Button -->
+  <section class="center-section">
+    <img src="/images/IMG_5829 copy.jpg" alt="Logo" class="center-logo" />
+    <h1>Welcome to P2shop</h1>
+    <p class="scrollable-paragraph">P2shop is your ultimate destination to buy and sell PokéCoins and shiny/rare Pokémon! Whether you're looking to enhance your collection with rare shinies or stock up on PokéCoins, our platform offers a secure and seamless experience for all Pokémon enthusiasts. Dive into the world of trading and make your Pokémon adventure even more exciting!</p>
+    <a href="https://discord.gg/Fm67gdDmkx" class="join-btn" target="_blank">Join Community</a>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
