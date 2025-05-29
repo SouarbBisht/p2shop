@@ -165,7 +165,7 @@
 
       if (itemId === '2') {
         // 🔥 Fetch shiny Pokémon from API
-        fetch('http://localhost:3000/api/products')
+        fetch('https://p2shopbackend.onrender.com/api/products')
           .then(response => response.json())
           .then(data => {
             data.forEach(p => {

@@ -2,12 +2,12 @@ function toggleMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.toggle('active');
   }
-  fetch('http://localhost:5000/api/contact', {
+  fetch('https://p2shopbackend.onrender.com/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: 'sourab@example.com', discord: 'Sourab#1234' })
   });
-  fetch('http://localhost:5000/api/sell', {
+  fetch('https://p2shopbackend.onrender.com/api/sell', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
