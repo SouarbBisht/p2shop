@@ -13,7 +13,7 @@
       padding: 0;
     }
 
-    .item-container, .item-header {
+    .item-container {
       text-align: center;
       padding: 30px 20px;
     }
@@ -107,30 +107,23 @@
       2: {
         title: "Available Shiny Pokémon",
         image: "images/IMG_5857.jpg",
-        description: "Choose from rare shiny Pokémon available now!",
-        products: [
-          { name: "Shiny Charizard", img: "images/shiny_charizard.jpg", price: "5M PC" },
-          { name: "Shiny Gyarados", img: "images/shiny_gyarados.jpg", price: "3M PC" },
-          { name: "Shiny Metagross", img: "images/shiny_metagross.jpg", price: "4M PC" },
-          { name: "Shiny Greninja", img: "images/shiny_greninja.jpg", price: "6M PC" },
-          { name: "Shiny Umbreon", img: "images/shiny_umbreon.jpg", price: "4M PC" },
-          { name: "Shiny Garchomp", img: "images/shiny_garchomp.jpg", price: "4.5M PC" }
-        ]
+        description: "Choose from rare shiny Pokémon available now!"
+        // products will come from API
       },
       3: {
-  title: "Rare Pokémon - Ultra Power",
-  image: "images/IMG_5859.jpg",
-  description: "Extremely rare Pokémon with unique skills. Only a few left!",
-  products: [
-    { name: "Darkrai", img: "images/darkrai.jpg", price: "7M PC" },
-    { name: "Arceus", img: "images/arceus.jpg", price: "8M PC" },
-    { name: "Mewtwo", img: "images/mewtwo.jpg", price: "6M PC" },
-    { name: "Rayquaza", img: "images/rayquaza.jpg", price: "7.5M PC" },
-    { name: "Giratina", img: "images/giratina.jpg", price: "6.5M PC" },
-    { name: "Zekrom", img: "images/zekrom.jpg", price: "6M PC" },
-    { name: "Reshiram", img: "images/reshiram.jpg", price: "6M PC" }
-  ]
-}
+        title: "Rare Pokémon - Ultra Power",
+        image: "images/IMG_5859.jpg",
+        description: "Extremely rare Pokémon with unique skills. Only a few left!",
+        products: [
+          { name: "Darkrai", img: "images/darkrai.jpg", price: "7M PC" },
+          { name: "Arceus", img: "images/arceus.jpg", price: "8M PC" },
+          { name: "Mewtwo", img: "images/mewtwo.jpg", price: "6M PC" },
+          { name: "Rayquaza", img: "images/rayquaza.jpg", price: "7.5M PC" },
+          { name: "Giratina", img: "images/giratina.jpg", price: "6.5M PC" },
+          { name: "Zekrom", img: "images/zekrom.jpg", price: "6M PC" },
+          { name: "Reshiram", img: "images/reshiram.jpg", price: "6M PC" }
+        ]
+      }
     };
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -169,17 +162,42 @@
         <h1>${item.title}</h1>
         <p style="color:#ccc;">${item.description}</p>
       `;
-      item.products.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <img src="${p.img}" alt="${p.name}" />
-          <h3>${p.name}</h3>
-          <p>${p.price}</p>
-          <button onclick="alert('Buying ${p.name}')">Buy</button>
-        `;
-        productGrid.appendChild(card);
-      });
+
+      if (itemId === '2') {
+        // 🔥 Fetch shiny Pokémon from API
+        fetch('http://localhost:3000/api/products')
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(p => {
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
+                <img src="images/default_shiny.jpg" alt="${p.name}" />
+                <h3>${p.name}</h3>
+                <p>${p.price}</p>
+                <button onclick="alert('Buying ${p.name}')">Buy</button>
+              `;
+              productGrid.appendChild(card);
+            });
+          })
+          .catch(err => {
+            productGrid.innerHTML = "<p style='color:red;'>Failed to load products.</p>";
+            console.error(err);
+          });
+      } else {
+        // Load static rare Pokémon
+        item.products.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${p.img}" alt="${p.name}" />
+            <h3>${p.name}</h3>
+            <p>${p.price}</p>
+            <button onclick="alert('Buying ${p.name}')">Buy</button>
+          `;
+          productGrid.appendChild(card);
+        });
+      }
     }
 
     function updatePrice() {

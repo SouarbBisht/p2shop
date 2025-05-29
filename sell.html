@@ -98,15 +98,18 @@
   <!-- Sell Section -->
   <div class="sell-container">
     <h1>Sell Your Pokémon PC</h1>
-    <form>
+    <form id="sellForm">
       <label for="sellerName">Your Name</label>
       <input type="text" id="sellerName" placeholder="Enter your name" required>
 
-      <label for="contact">Contact (Email or Phone)</label>
-      <input type="text" id="contact" placeholder="Optional">
+      <label for="phone">Contact Phone</label>
+      <input type="text" id="phone" placeholder="Optional">
+
+      <label for="email">Contact Email</label>
+      <input type="text" id="email" placeholder="Optional">
 
       <label for="pokemonName">Pokémon Name / Type</label>
-      <input type="text" id="pokemonName" placeholder="e.g., Pikachu, PC" required>
+      <input type="text" id="pokemonName" placeholder="e.g., Pikachu, PC">
 
       <label for="image">Upload Image</label>
       <input type="file" id="image" accept="image/*">
@@ -121,5 +124,46 @@
     </form>
   </div>
 
+  <!-- ✅ Corrected Script -->
+  <script>
+    document.getElementById('sellForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('sellerName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const price = document.getElementById('price').value;
+
+      const payload = {
+        name,
+        email,
+        phone,
+        price
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('✅ Pokémon Ad Posted Successfully!');
+          e.target.reset();
+        } else {
+          alert('❌ Error: ' + (data.message || 'Something went wrong.'));
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('❌ Failed to post the ad. Check server connection.');
+      }
+    });
+  </script>
+  
 </body>
 </html>
