@@ -135,7 +135,7 @@
 
     if (itemId === '1') {
       itemContainer.innerHTML = `
-        <img src="${item.image}" alt="${item.title}" />
+        <img src="${item.imgs}" alt="${item.title}" />
         <h1>${item.title}</h1>
         <p>${item.description}</p>
         <div class="options">
@@ -172,7 +172,7 @@
               const card = document.createElement("div");
               card.className = "card";
               card.innerHTML = `
-                <img src="images/default_shiny.jpg" alt="${p.name}" />
+                <img src="${p.imgs}" alt="${p.name}" />
                 <h3>${p.name}</h3>
                 <p>${p.price}</p>
                 <button onclick="alert('Buying ${p.name}')">Buy</button>

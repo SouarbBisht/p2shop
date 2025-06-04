@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon Marketplace</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        background-color: #121212;
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links li {
+        list-style: none;
+      }
+
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .create-button {
+        margin: 30px auto;
+        display: block;
+        padding: 10px 20px;
+        background-color: #f39c12;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .create-button:hover {
+        background-color: #d35400;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+
+      .modal-content {
+        background-color: #1e1e1e;
+        margin: 100px auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 500px;
+      }
+
+      .modal-content h1 {
+        text-align: center;
+        color: #f39c12;
+      }
+
+      .modal-content label {
+        display: block;
+        margin-top: 15px;
+      }
+
+      .modal-content input,
+      .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: none;
+        background-color: #333;
+        color: white;
+      }
+
+      .modal-content button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 10px;
+        background-color: #f39c12;
+        border: none;
+        border-radius: 5px;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .modal-content button:hover {
+        background-color: #d35400;
+      }
+
+      .close-btn {
+        float: right;
+        font-size: 22px;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      table {
+        width: 90%;
+        margin: 40px auto;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #333;
+      }
+
+      th {
+        background-color: #333;
+      }
+
+      td img {
+        width: 80px;
+        border-radius: 8px;
+      }
+
+      button {
+        margin: 0 4px;
+        padding: 4px 8px;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        font-size: 18px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buy.html">Buy</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Create Card Button -->
+    <button class="create-button" id="openModal">Create Card</button>
+
+    <!-- Modal Form -->
+    <div class="modal" id="productModal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h1 id="modalTitle">Post New Pokémon</h1>
+        <form id="productForm">
+          <label for="name">Pokémon Name</label>
+          <input type="text" id="name" required />
+
+          <label for="price">Price</label>
+          <input type="number" id="price" required />
+
+          <label for="image">Image URL</label>
+          <input
+            type="text"
+            id="image"
+            placeholder="Paste image link"
+            required
+          />
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Pokémon</th>
+          <th>Price</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+        <!-- Dynamic content here -->
+      </tbody>
+    </table>
+
+    <!-- JavaScript -->
+    <script>
+      const modal = document.getElementById("productModal");
+      const openModalBtn = document.getElementById("openModal");
+      const closeModalBtn = document.getElementById("closeModal");
+      const form = document.getElementById("productForm");
+      const tableBody = document.getElementById("productTableBody");
+      const modalTitle = document.getElementById("modalTitle");
+      let editingProductId = null;
+
+      // Show modal
+      openModalBtn.onclick = () => {
+        modal.style.display = "block";
+        editingProductId = null;
+        modalTitle.textContent = "Post New Pokémon";
+        form.reset();
+      };
+
+      // Close modal
+      closeModalBtn.onclick = () => {
+        modal.style.display = "none";
+      };
+
+      // Hide modal on outside click
+      window.onclick = (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // Load all products
+      async function loadProducts() {
+        try {
+          const response = await fetch("http://localhost:8000/api/products");
+          const products = await response.json();
+
+          tableBody.innerHTML = "";
+          products.forEach((product) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${product.name}</td>
+              <td>₹${product.price}</td>
+              <td><img src="${product.imgs}" alt="${product.name}"></td>
+              <td>
+                <button onclick="editProduct('${product._id}')">✏️</button>
+                <button onclick="deleteProduct('${product._id}')">🗑️</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Failed to load products:", error);
+        }
+      }
+
+      // Submit form
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const price = document.getElementById("price").value;
+        const imgs = document.getElementById("image").value;
+
+        const payload = { name, price, imgs };
+
+        const url = editingProductId
+          ? `https://p2shopbackend.onrender.com/api/products/${editingProductId}`
+          : "https://p2shopbackend.onrender.com/api/products";
+
+        const method = editingProductId ? "PUT" : "POST";
+
+        try {
+          await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          modal.style.display = "none";
+          form.reset();
+          loadProducts();
+        } catch (error) {
+          console.error("Failed to submit product:", error);
+        }
+      });
+
+      // Edit product
+      window.editProduct = async (id) => {
+        try {
+          const res = await fetch("http://localhost:8000/api/products");
+          const products = await res.json();
+          const product = products.find((p) => p._id === id);
+          if (!product) return;
+
+          editingProductId = id;
+          document.getElementById("name").value = product.name;
+          document.getElementById("price").value = product.price;
+          document.getElementById("image").value = product.imgs;
+          modalTitle.textContent = "Update Pokémon";
+          modal.style.display = "block";
+        } catch (error) {
+          console.error("Failed to load product for edit:", error);
+        }
+      };
+
+      // Delete product
+      window.deleteProduct = async (id) => {
+        if (confirm("Are you sure you want to delete this product?")) {
+          try {
+            await fetch(`https://p2shopbackend.onrender.com/api/products/${id}`, {
+              method: "DELETE",
+            });
+            loadProducts();
+          } catch (error) {
+            console.error("Failed to delete product:", error);
+          }
+        }
+      };
+
+      // Load on start
+      loadProducts();
+    </script>
+  </body>
+</html>
